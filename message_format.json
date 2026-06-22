@@ -1,0 +1,13 @@
+{
+	"recipients_public_key_id" : "",
+	"encrypted_session_key" : "",
+	"cypher_text" : "",
+	"flags": {
+    "is_signed": true,
+    "is_encrypted": true,
+    "is_compressed": true,
+    "is_radix64": true,
+    "symmetric_algorithm": "AES128" || TripleDES || Cast5 || IDEA
+	"rsa_key_size": "1024", || "2048"
+  }
+}
