@@ -1,0 +1,18 @@
+
+signed - true || false
+zip - true || false
+encrypt - true || false
+radix64 - true || false
+Radix(MSG)
+{
+	IDEC-"3xDES" || "AES"
+	IDPub-64b
+	EPub(Ks)-128b
+	EKs(ZIP(MSG))
+		{
+		IDpotpisa-120b
+		IDPua-64b
+		EPra(potpis)
+		MSG
+		}
+}		
