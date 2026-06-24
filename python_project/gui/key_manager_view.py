@@ -159,8 +159,8 @@ class KeyManagerView(tk.Frame):
         """
         Args:
             parent:           The ttk.Notebook tab frame this lives inside.
-            private_key_ring: List of dicts — owned and written by key_ring.py
-            public_key_ring:  List of dicts — owned and written by key_ring.py
+            private_key_ring: List of dicts — owned and written by prstenovi_kluceva.py
+            public_key_ring:  List of dicts — owned and written by prstenovi_kluceva.py
         """
         super().__init__(parent, bg="#f0f0f0")
         self.pack(fill=tk.BOTH, expand=True)
@@ -375,7 +375,7 @@ class KeyManagerView(tk.Frame):
         if not confirm:
             return
 
-        # TODO: replace with real call once key_ring.py is implemented
+        # TODO: replace with real call once prstenovi_kluceva.py is implemented
         # from models.key_ring import delete_private_key
         # delete_private_key(key_id)
         # self.private_key_ring = [k for k in self.private_key_ring
@@ -400,7 +400,7 @@ class KeyManagerView(tk.Frame):
         if not confirm:
             return
 
-        # TODO: replace with real call once key_ring.py is implemented
+        # TODO: replace with real call once prstenovi_kluceva.py is implemented
         # from models.key_ring import delete_public_key
         # delete_public_key(key_id)
         # self.public_key_ring = [k for k in self.public_key_ring
