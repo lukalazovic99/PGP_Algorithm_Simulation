@@ -15,8 +15,8 @@ class SendDialog(tk.Frame):
         """
         Args:
             parent:           The ttk.Notebook tab frame this lives inside.
-            private_key_ring: List of dicts from prstenovi_kluceva.py — used to populate signing key dropdown.
-            public_key_ring:  List of dicts from prstenovi_kluceva.py — used to populate encryption key dropdown.
+            private_key_ring: List of dicts from prstenovi_kljuceva.py — used to populate signing key dropdown.
+            public_key_ring:  List of dicts from prstenovi_kljuceva.py — used to populate encryption key dropdown.
         """
         super().__init__(parent, bg="#f0f0f0")
         self.pack(fill=tk.BOTH, expand=True)
