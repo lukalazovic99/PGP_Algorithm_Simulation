@@ -1,4 +1,4 @@
-from prstenovi_kljuceva import *
+from python_project.keys.prstenovi_kljuceva import *
 
 lista_kljuceva = load_prsten_javnih_kljuceva()
 

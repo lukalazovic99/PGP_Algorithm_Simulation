@@ -1,0 +1,2 @@
+[{"timestamp": "2026-06-23 10:00:00", "key_id": "AABBCCDD11223344", "user_id": "Alice <alice@etf.bg>", "key_size": "2048", "public_key": "-----BEGIN RSA PUBLIC KEY-----FAKEKEYDATA-----END RSA PUBLIC KEY-----"},
+    {"timestamp": "2026-06-23 11:00:00", "key_id": "FFEE998877665544", "user_id": "Bob <bob@etf.bg>", "key_size": "1024", "public_key": "-----BEGIN RSA PUBLIC KEY-----FAKEKEYDATA2-----END RSA PUBLIC KEY-----"}]
