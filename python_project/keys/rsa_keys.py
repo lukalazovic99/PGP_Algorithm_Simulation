@@ -51,4 +51,3 @@ def generisi_kljuceve(name:str,email:str,size:int,password:str):
     dodaj_javni_kljuc(javni_dic)
     dodaj_privatni_kljuc(privatni_dic)
 
-generisi_kljuceve("Vlajinac","mail@nba.rs",2048,"word")
