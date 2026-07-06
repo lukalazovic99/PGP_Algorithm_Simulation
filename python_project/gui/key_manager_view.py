@@ -159,8 +159,8 @@ class KeyManagerView(tk.Frame):
         """
         Args:
             parent:           The ttk.Notebook tab frame this lives inside.
-            private_key_ring: List of dicts — owned and written by prstenovi_kljuceva.py
-            public_key_ring:  List of dicts — owned and written by prstenovi_kljuceva.py
+            private_key_ring: List of dicts — owned and written by key_ring.py
+            public_key_ring:  List of dicts — owned and written by key_ring.py
         """
         super().__init__(parent, bg="#f0f0f0")
         self.pack(fill=tk.BOTH, expand=True)
@@ -185,7 +185,7 @@ class KeyManagerView(tk.Frame):
         priv_outer.pack(fill=tk.BOTH, expand=True, **pad)
 
         # Table
-        priv_cols = ("timestamp", "key_id", "user_id", "key_size")
+        priv_cols = ("timestamp", "key_id", "user_name", "user_email", "key_size")
         self.priv_tree = ttk.Treeview(
             priv_outer,
             columns=priv_cols,
@@ -194,10 +194,11 @@ class KeyManagerView(tk.Frame):
             selectmode="browse"
         )
         self._configure_columns(self.priv_tree, {
-            "timestamp": ("Timestamp",   160),
-            "key_id":    ("Key ID",      180),
-            "user_id":   ("User ID",     220),
-            "key_size":  ("Key Size",     80),
+            "timestamp":  ("Timestamp",   150),
+            "key_id":     ("Key ID",      170),
+            "user_name":  ("Name",        130),
+            "user_email": ("Email",       170),
+            "key_size":   ("Key Size",     80),
         })
 
         priv_scroll = ttk.Scrollbar(priv_outer, orient="vertical",
@@ -229,7 +230,7 @@ class KeyManagerView(tk.Frame):
         pub_outer = tk.Frame(self, bg="#f0f0f0")
         pub_outer.pack(fill=tk.BOTH, expand=True, **pad)
 
-        pub_cols = ("timestamp", "key_id", "user_id", "key_size")
+        pub_cols = ("timestamp", "key_id", "user_name", "user_email", "key_size")
         self.pub_tree = ttk.Treeview(
             pub_outer,
             columns=pub_cols,
@@ -238,10 +239,11 @@ class KeyManagerView(tk.Frame):
             selectmode="browse"
         )
         self._configure_columns(self.pub_tree, {
-            "timestamp": ("Timestamp",   160),
-            "key_id":    ("Key ID",      180),
-            "user_id":   ("User ID",     220),
-            "key_size":  ("Key Size",     80),
+            "timestamp":  ("Timestamp",   150),
+            "key_id":     ("Key ID",      170),
+            "user_name":  ("Name",        130),
+            "user_email": ("Email",       170),
+            "key_size":   ("Key Size",     80),
         })
 
         pub_scroll = ttk.Scrollbar(pub_outer, orient="vertical",
@@ -300,9 +302,10 @@ class KeyManagerView(tk.Frame):
             self.priv_tree.delete(row)
         for entry in self.private_key_ring:
             self.priv_tree.insert("", tk.END, values=(
-                entry.get("timestamp", ""),
-                entry.get("key_id",    ""),
-                entry.get("user_id",   ""),
+                entry.get("timestamp",  ""),
+                entry.get("key_id",     ""),
+                entry.get("user_name",  ""),
+                entry.get("user_email", ""),
                 f"{entry.get('key_size', '')} bit",
             ))
 
@@ -311,9 +314,10 @@ class KeyManagerView(tk.Frame):
             self.pub_tree.delete(row)
         for entry in self.public_key_ring:
             self.pub_tree.insert("", tk.END, values=(
-                entry.get("timestamp", ""),
-                entry.get("key_id",    ""),
-                entry.get("user_id",   ""),
+                entry.get("timestamp",  ""),
+                entry.get("key_id",     ""),
+                entry.get("user_name",  ""),
+                entry.get("user_email", ""),
                 f"{entry.get('key_size', '')} bit",
             ))
 
@@ -375,7 +379,7 @@ class KeyManagerView(tk.Frame):
         if not confirm:
             return
 
-        # TODO: replace with real call once prstenovi_kljuceva.py is implemented
+        # TODO: replace with real call once key_ring.py is implemented
         # from models.key_ring import delete_private_key
         # delete_private_key(key_id)
         # self.private_key_ring = [k for k in self.private_key_ring
@@ -400,7 +404,7 @@ class KeyManagerView(tk.Frame):
         if not confirm:
             return
 
-        # TODO: replace with real call once prstenovi_kljuceva.py is implemented
+        # TODO: replace with real call once key_ring.py is implemented
         # from models.key_ring import delete_public_key
         # delete_public_key(key_id)
         # self.public_key_ring = [k for k in self.public_key_ring
@@ -481,24 +485,27 @@ class KeyManagerView(tk.Frame):
 if __name__ == "__main__":
     fake_private = [
         {
-            "timestamp": "2026-06-23 10:00:00",
-            "key_id":    "AABBCCDD11223344",
-            "user_id":   "Alice <alice@example.com>",
-            "key_size":  2048,
+            "timestamp":  "2026-06-23 10:00:00",
+            "key_id":     "AABBCCDD11223344",
+            "user_name":  "Alice",
+            "user_email": "alice@example.com",
+            "key_size":   2048,
         },
         {
-            "timestamp": "2026-06-22 09:15:00",
-            "key_id":    "EEFF001122334455",
-            "user_id":   "Bob <bob@example.com>",
-            "key_size":  1024,
+            "timestamp":  "2026-06-22 09:15:00",
+            "key_id":     "EEFF001122334455",
+            "user_name":  "Bob",
+            "user_email": "bob@example.com",
+            "key_size":   1024,
         },
     ]
     fake_public = [
         {
-            "timestamp": "2026-06-23 11:00:00",
-            "key_id":    "FFEE998877665544",
-            "user_id":   "Charlie <charlie@example.com>",
-            "key_size":  2048,
+            "timestamp":  "2026-06-23 11:00:00",
+            "key_id":     "FFEE998877665544",
+            "user_name":  "Charlie",
+            "user_email": "charlie@example.com",
+            "key_size":   2048,
         },
     ]
 

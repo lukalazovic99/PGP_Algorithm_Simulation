@@ -1,2 +1,48 @@
-[{"timestamp": "2026-06-23 10:00:00", "key_id": "AABBCCDD11223344", "user_id": "Alice <alice@etf.bg>", "key_size": "2048", "public_key": "-----BEGIN RSA PUBLIC KEY-----FAKEKEYDATA-----END RSA PUBLIC KEY-----"},
-    {"timestamp": "2026-06-23 11:00:00", "key_id": "FFEE998877665544", "user_id": "Bob <bob@etf.bg>", "key_size": "1024", "public_key": "-----BEGIN RSA PUBLIC KEY-----FAKEKEYDATA2-----END RSA PUBLIC KEY-----"}]
+[
+  {
+    "timestamp": "2026-06-23 10:00:00",
+    "key_id": "AABBCCDD11223344",
+    "user_id": "Alice <alice@etf.bg>",
+    "key_size": "2048",
+    "public_key": "-----BEGIN RSA PUBLIC KEY-----FAKEKEYDATA-----END RSA PUBLIC KEY-----"
+  },
+  {
+    "timestamp": "2026-06-23 11:00:00",
+    "key_id": "FFEE998877665544",
+    "user_id": "Bob <bob@etf.bg>",
+    "key_size": "1024",
+    "public_key": "-----BEGIN RSA PUBLIC KEY-----FAKEKEYDATA2-----END RSA PUBLIC KEY-----"
+  },
+  {
+    "timestamp": "2026-07-06 13:10:09",
+    "key_id": "68794B874CE86DAD",
+    "user_name": "bogdan",
+    "user_email": "mail",
+    "key_size": 1024,
+    "public_key": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC+8/j4nEvytO4chW8O2tMbnajQ\nHrrOw5PxBjEFTzitNzSSObdfFQtP/u5xplnPxPOWT2xBFceuz/g1ap+kJPymu13n\nN4kwJBuYcmxnuU95EqM82N0NByOzxnVEjffc887UBXg0Efl9QOsgA2X56EGYogy5\nIAF66dVoeUuHTOhtrQIDAQAB\n-----END PUBLIC KEY-----\n"
+  },
+  {
+    "timestamp": "2026-07-06 13:10:50",
+    "key_id": "FF7D635E930D5463",
+    "user_name": "bogdan",
+    "user_email": "mail",
+    "key_size": 1024,
+    "public_key": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDHhIbkGiz+YPox3AdwNFzguUTx\n4sFKMxLrlNg7mtVMj/V4O0nXlg4o6SCsYPKQBcMqd4LgwaU792GJ8w6ZAxxSUCye\nc47GnUQ/IEnieS60WX37G+AyhbDtbfiuXw0vbqvJbS2xpDAKXumLoy1q5Fjldt7b\nGXBhuwX/fWNekw1UYwIDAQAB\n-----END PUBLIC KEY-----\n"
+  },
+  {
+    "timestamp": "2026-07-06 13:15:12",
+    "key_id": "2E042530B303A2B9",
+    "user_name": "bogdan",
+    "user_email": "mail",
+    "key_size": 1024,
+    "public_key": "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD4gvH+kic//xOeNTJWYD3oy/W2\nwdaUcUYs0zrBG5itqRGfPwbusmj4ucgE0QJoiGZSC+5XezHG/WZTMPNZgHeJ42ve\nFQ1rWrWB4SKBuC2wg32M/dP2mILKj2INIcblcqP2Th7bxlwBBV4Yp1ysyxDwjxpA\nWLBbQwouBCUwswOiuQIDAQAB\n-----END PUBLIC KEY-----\n"
+  },
+  {
+    "timestamp": "2026-07-06 13:40:25",
+    "key_id": "54D7B5FF707FBF41",
+    "user_name": "Vlajinac",
+    "user_email": "mail@nba.rs",
+    "key_size": 2048,
+    "public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3qErtLnIyZX6UkFp8m3t\nsR/6VPK6B2+wp22K/MA7DJUSnEkznue9E0PfAkzdhbHaKG8FvByOUDTXzNQKh45m\npTxAkbDo5EBvLEfQJ8XGhd5LFs/FuONRXFusRwLlujZTMku9hVLnGkxp31g0nm7a\nCG304UcarZY77CFKPLqysOiDQhzQjoeoUMjw4IxY2XgBuyGe+X+DBdM9HcICbqMM\nYn11chMUK1xfN4zPafcOrR7QuJBYbSJn7N9i8Je7Rr1Z363M3TiU9wLTKdM1KSxK\nD7fL9typHNN8Wwmq0CbHFCdZBpz9/lcuTbGWsohon2HRnq5INzw7Gk9U17X/cH+/\nQQIDAQAB\n-----END PUBLIC KEY-----\n"
+  }
+]

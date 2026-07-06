@@ -15,8 +15,8 @@ class SendDialog(tk.Frame):
         """
         Args:
             parent:           The ttk.Notebook tab frame this lives inside.
-            private_key_ring: List of dicts from prstenovi_kljuceva.py — used to populate signing key dropdown.
-            public_key_ring:  List of dicts from prstenovi_kljuceva.py — used to populate encryption key dropdown.
+            private_key_ring: List of dicts from key_ring.py — used to populate signing key dropdown.
+            public_key_ring:  List of dicts from key_ring.py — used to populate encryption key dropdown.
         """
         super().__init__(parent, bg="#f0f0f0")
         self.pack(fill=tk.BOTH, expand=True)
@@ -265,11 +265,11 @@ class SendDialog(tk.Frame):
         Format shown: "user@email.com  [KeyID: XXXXXXXXXXXXXXXX]"
         """
         private_options = [
-            f"{entry['user_id']}  [KeyID: {entry['key_id']}]"
+            f"{entry['user_name']} <{entry['user_email']}>  [KeyID: {entry['key_id']}]"
             for entry in self.private_key_ring
         ]
         public_options = [
-            f"{entry['user_id']}  [KeyID: {entry['key_id']}]"
+            f"{entry['user_name']} <{entry['user_email']}>  [KeyID: {entry['key_id']}]"
             for entry in self.public_key_ring
         ]
 
@@ -393,12 +393,12 @@ class SendDialog(tk.Frame):
 if __name__ == "__main__":
     # Fake key ring data so the dropdowns are populated during preview
     fake_private = [
-        {"user_id": "alice@example.com", "key_id": "AABBCCDD11223344"},
-        {"user_id": "bob@example.com",   "key_id": "EEFF001122334455"},
+        {"user_name": "Alice", "user_email": "alice@example.com", "key_id": "AABBCCDD11223344"},
+        {"user_name": "Bob",   "user_email": "bob@example.com",   "key_id": "EEFF001122334455"},
     ]
     fake_public = [
-        {"user_id": "charlie@example.com", "key_id": "FFEE998877665544"},
-        {"user_id": "diana@example.com",   "key_id": "11223344AABBCCDD"},
+        {"user_name": "Charlie", "user_email": "charlie@example.com", "key_id": "FFEE998877665544"},
+        {"user_name": "Diana",   "user_email": "diana@example.com",   "key_id": "11223344AABBCCDD"},
     ]
 
     root = tk.Tk()

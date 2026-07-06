@@ -1,6 +1,7 @@
 import json
 
 
+
 def load_prsten_javnih_kljuceva ():
     with open("PUkeys.json", "r") as file:
         lista_kljuceva = json.load(file)
@@ -64,4 +65,6 @@ def dohvati_privatni_kljuc(id:str):
             return kljuc
 
     return None
+
+
 
