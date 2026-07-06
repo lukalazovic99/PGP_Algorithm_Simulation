@@ -1,0 +1,23 @@
+
+signed - true || false
+zip - true || false
+encrypt - true || false
+radix64 - true || false
+Radix(MSG)
+{
+	IDEC-"3xDES" || "AES"
+	IDPub-64b
+	EPub(Ks)-1024b 
+	IV-64b || 128b
+	EKs(ZIP(MSG))
+		{
+		signature_timestamp - datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+		dva_okteta-16b
+		IDPua-64b
+		EPra(HASH(timestamp+MSG)) -160b
+		MSG		
+		}
+}
+
+# (Ks je 128b)
+# (timestamp+MSG) je timestamp:str + " || " + MSG:str		
