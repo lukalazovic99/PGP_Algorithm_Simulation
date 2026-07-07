@@ -22,7 +22,7 @@ def decrypt_payload(ciphertext_b64: str, session_key: bytes, iv_b64: str, algori
     if algorithm == "AES":
         myCipher = Cipher(algorithms.AES(session_key), modes.CFB(iv))
         myDecryptor = myCipher.decryptor()
-    else:  ##"3DES"
+    else:  ##"3xDES"
         myCipher = Cipher(algorithms.TripleDES(session_key), modes.CFB(iv))
         myDecryptor = myCipher.decryptor()
 
