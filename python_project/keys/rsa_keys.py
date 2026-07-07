@@ -2,7 +2,7 @@ from datetime import datetime
 
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
-from python_project.keys.prstenovi_kljuceva import *
+from keys.prstenovi_kljuceva import *
 
 def generisi_kljuceve(name:str,email:str,size:int,password:str):
     pr = rsa.generate_private_key(65537,size)

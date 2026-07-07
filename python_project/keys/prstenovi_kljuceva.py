@@ -1,24 +1,27 @@
 import json
-
+from pathlib import Path
 from cryptography.hazmat.primitives import serialization
 
+KEYS_DIR = Path(__file__).resolve().parent
+PUBLIC_RING_PATH = KEYS_DIR / "PUkeys.json"
+PRIVATE_RING_PATH = KEYS_DIR / "PRkeys.json"
 
 def load_prsten_javnih_kljuceva ():
-    with open("PUkeys.json", "r") as file:
+    with PUBLIC_RING_PATH.open("r", encoding="utf-8") as file:
         lista_kljuceva = json.load(file)
     return lista_kljuceva
 
 def load_prsten_privatnih_kljuceva ():
-    with open("PRkeys.json", "r") as file:
+    with PRIVATE_RING_PATH.open("r", encoding="utf-8") as file:
         lista_kljuceva = json.load(file)
     return lista_kljuceva
 
 def store_prsten_javnih_kljuceva (prsten:list):
-    with open("PUkeys.json", "w") as file:
+    with PUBLIC_RING_PATH.open("w", encoding="utf-8") as file:
         json.dump(prsten,file,indent=2)
 
 def store_prsten_privatnih_kljuceva (prsten:list):
-    with open("PRkeys.json", "w") as file:
+    with PRIVATE_RING_PATH.open("r", encoding="utf-8") as file:
         json.dump(prsten,file,indent=2)
 
 def dodaj_javni_kljuc (kljuc:dict):
