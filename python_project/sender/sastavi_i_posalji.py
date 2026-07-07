@@ -15,13 +15,15 @@ def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,
     pu_key = None
     if sign:
         pr_key = dohvati_objekat_privatni_kljuc(private_senderkey_id, password)
-        if pr_key is None:
-            return
+        if pr_key["ERROR"] is True:
+            return pr_key
     if encrypt:
         pu_key = dohvati_objekat_javni_kljuc(public_recieverkey_id)
-        if pu_key is None:
-            return
+        if pu_key["ERROR"] is True:
+            return pu_key
 
+    pu_key = pu_key["info"]
+    pr_key = pr_key["info"]
 
     #----------------------------------Dohvatili kljuceve-----------------------------------------
 
@@ -100,6 +102,6 @@ def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,
     with open(dest_file, "w") as f:
         json.dump(outer, f, indent=2) #indent da ne bude sve u 1 redu samo
 
-    return
+    return {"ERROR":False, "info":"Uspesno poslata poruka i sacuvana u " + dest_file}
 
 

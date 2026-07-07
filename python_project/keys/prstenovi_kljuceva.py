@@ -73,22 +73,19 @@ def dohvati_privatni_kljuc(id:str):
 def dohvati_objekat_javni_kljuc(id:str):
     ke = dohvati_javni_kljuc(id)
     if ke is None:
-        print("GRESKA dohvatanje javnog kljuca")
-        return None
+        return {"ERROR":True, "info":"GRESKA dohvatanje javnog kljuca"}
     ulaz_javnog_kljuca = ke["public_key"].encode("utf-8")
     pu_key = serialization.load_pem_public_key(ulaz_javnog_kljuca)
-    return pu_key
+    return {"ERROR":False, "info":pu_key}
 
 def dohvati_objekat_privatni_kljuc(id:str,password:str):
     ke = dohvati_privatni_kljuc(id)
     if ke is None:
-        print("GRESKA dohvatanje privatnog kljuca")
-        return None
+        return {"ERROR":True, "info":"GRESKA dohvatanje privatnog kljuca"}
     ulaz_privatnog_kljuca = ke["encrypted_private_key"].encode("utf-8")
     try:
         pr_key = serialization.load_pem_private_key(ulaz_privatnog_kljuca, password.encode("utf-8"))
     except (ValueError, TypeError):
-        print("GRESKA pogrešna lozinka")
-        return None
-    return pr_key
+        return {"ERROR":True, "info":"GRESKA pogrešna lozinka"}
+    return {"ERROR":False, "info":pr_key}
 
