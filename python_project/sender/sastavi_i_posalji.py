@@ -1,11 +1,11 @@
 import base64
 import json
 from cryptography.hazmat.primitives import serialization
-from python_project.keys.prstenovi_kljuceva import *
-from python_project.sender.enkripcija import enkriptuj
-from python_project.sender.potpis import potpisi_poruku
-from python_project.sender.r64 import radixuj
-from python_project.sender.zip import zipuj
+from keys.prstenovi_kljuceva import *
+from sender.enkripcija import enkriptuj
+from sender.potpis import potpisi_poruku
+from sender.r64 import radixuj
+from sender.zip import zipuj
 
 
 def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,

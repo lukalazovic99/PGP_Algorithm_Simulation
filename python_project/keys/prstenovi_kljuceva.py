@@ -21,7 +21,7 @@ def store_prsten_javnih_kljuceva (prsten:list):
         json.dump(prsten,file,indent=2)
 
 def store_prsten_privatnih_kljuceva (prsten:list):
-    with PRIVATE_RING_PATH.open("r", encoding="utf-8") as file:
+    with PRIVATE_RING_PATH.open("w", encoding="utf-8") as file:
         json.dump(prsten,file,indent=2)
 
 def dodaj_javni_kljuc (kljuc:dict):
