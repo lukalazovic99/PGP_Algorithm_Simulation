@@ -17,13 +17,15 @@ def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,
         pr_key = dohvati_objekat_privatni_kljuc(private_senderkey_id, password)
         if pr_key["ERROR"] is True:
             return pr_key
+        pr_key = pr_key["info"]
     if encrypt:
         pu_key = dohvati_objekat_javni_kljuc(public_recieverkey_id)
         if pu_key["ERROR"] is True:
             return pu_key
+        pu_key = pu_key["info"]
 
-    pu_key = pu_key["info"]
-    pr_key = pr_key["info"]
+
+
 
     #----------------------------------Dohvatili kljuceve-----------------------------------------
 
