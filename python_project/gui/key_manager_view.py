@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, simpledialog
 
-from keys.rsa_keys import generisi_kljuceve
+from keys.rsa_keys import generisi_kljuceve, exportuj_par_kljuceva, exportuj_javni_kljuc
 from keys.prstenovi_kljuceva import (
     load_prsten_privatnih_kljuceva,
     load_prsten_javnih_kljuceva,
@@ -458,12 +458,17 @@ class KeyManagerView(tk.Frame):
         if not path:
             return
 
-        # TODO: replace with real call once rsa_keys.py is implemented
-        # from crypto.rsa_keys import export_public_key
-        # export_public_key(key_id, path)
+        try:
+            result = exportuj_javni_kljuc(key_id, path)
+        except Exception as e:
+            messagebox.showerror("Export failed", str(e))
+            return
 
-        messagebox.showinfo("Export", f"Public key {key_id} → {path}\n"
-                                      f"(Crypto layer not yet connected.)")
+        if result["ERROR"] is True:
+            messagebox.showerror("Export failed", result["info"])
+            return
+
+        messagebox.showinfo("Export", f"Public key {key_id} -> {path}")
 
     def _on_export_private(self):
         """Exports the full key pair (public + encrypted private) to .pem."""
@@ -481,12 +486,17 @@ class KeyManagerView(tk.Frame):
         if not path:
             return
 
-        # TODO: replace with real call once rsa_keys.py is implemented
-        # from crypto.rsa_keys import export_key_pair
-        # export_key_pair(key_id, path)
+        try:
+            result = exportuj_par_kljuceva(key_id, path)
+        except Exception as e:
+            messagebox.showerror("Export failed", str(e))
+            return
 
-        messagebox.showinfo("Export", f"Key pair {key_id} → {path}\n"
-                                      f"(Crypto layer not yet connected.)")
+        if result["ERROR"] is True:
+            messagebox.showerror("Export failed", result["info"])
+            return
+
+        messagebox.showinfo("Export", f"Key pair {key_id} -> {path}")
 
     def _on_import_public(self):
         """Imports a public key from a .pem file into the public key ring."""
