@@ -58,10 +58,12 @@ def receive_message(outer_message: str,
             signed_layer = json.loads(payload_bytes.decode("utf-8"))
     else:
         payload_field = encryption_layer["EKs(ZIP(MSG))"]
-        payload_bytes = decode_base64(payload_field)
         if zipped:
+            payload_bytes = decode_base64(payload_field)
             payload_bytes = unzip(payload_bytes)
-        signed_layer = json.loads(payload_bytes.decode("utf-8"))
+            signed_layer = json.loads(payload_bytes.decode("utf-8"))
+        else:
+            signed_layer = payload_field
 
     sig_rs = None
     if signed:

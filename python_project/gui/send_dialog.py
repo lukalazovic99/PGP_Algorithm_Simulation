@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
+from sender.sastavi_i_posalji import posalji_poruku
+
 
 class SendDialog(tk.Frame):
     """
@@ -29,7 +31,7 @@ class SendDialog(tk.Frame):
         self.encrypt_var    = tk.BooleanVar(value=False)
         self.compress_var   = tk.BooleanVar(value=True)
         self.radix64_var    = tk.BooleanVar(value=True)
-        self.algorithm_var  = tk.StringVar(value="AES128")
+        self.algorithm_var  = tk.StringVar(value="AES")
         self.sign_key_var   = tk.StringVar()
         self.enc_key_var    = tk.StringVar()
         self.output_path    = tk.StringVar(value="No file selected")
@@ -175,10 +177,10 @@ class SendDialog(tk.Frame):
 
         ttk.Radiobutton(algo_frame, text="AES-128",
                         variable=self.algorithm_var,
-                        value="AES128").pack(side=tk.LEFT, padx=(0, 16))
+                        value="AES").pack(side=tk.LEFT, padx=(0, 16))
         ttk.Radiobutton(algo_frame, text="3DES (TripleDES)",
                         variable=self.algorithm_var,
-                        value="3DES").pack(side=tk.LEFT)
+                        value="3xDES").pack(side=tk.LEFT)
 
         # ── Section: Output file ──────────────────────────────────────────────
         self._section_label("Output")
@@ -257,6 +259,22 @@ class SendDialog(tk.Frame):
         )
         if path:
             self.output_path.set(path)
+
+    def reload_keys(self):
+        """Re-reads both key rings from disk and refreshes the dropdowns.
+        Called by main.py whenever the Send tab becomes visible, so keys
+        generated in the Key Manager tab appear here without a restart."""
+        try:
+            from keys.prstenovi_kljuceva import (
+                load_prsten_privatnih_kljuceva,
+                load_prsten_javnih_kljuceva,
+            )
+            self.private_key_ring = load_prsten_privatnih_kljuceva()
+            self.public_key_ring = load_prsten_javnih_kljuceva()
+        except Exception:
+            self.private_key_ring = []
+            self.public_key_ring = []
+        self._refresh_key_dropdowns()
 
     def _refresh_key_dropdowns(self):
         """
@@ -342,38 +360,33 @@ class SendDialog(tk.Frame):
         compress = self.compress_var.get()
         radix64  = self.radix64_var.get()
 
-        # ── 6. Hand off to crypto layer (to be implemented) ───────────────────
-        params = {
-            "message":      message,
-            "sign":         sign,
-            "sign_key_id":  sign_key_id,
-            "sign_password": sign_password,
-            "encrypt":      encrypt,
-            "enc_key_id":   enc_key_id,
-            "algorithm":    algorithm,
-            "compress":     compress,
-            "radix64":      radix64,
-            "output_path":  output_path,
-        }
+        # ── 6. Hand off to the real pipeline ──────────────────────────────────
+        try:
+            result = posalji_poruku(
+                message,          # msg
+                sign,             # sign
+                compress,         # ziped
+                encrypt,          # encrypt
+                radix64,          # radix64
+                sign_key_id,      # private_senderkey_id
+                enc_key_id,       # public_recieverkey_id
+                sign_password,    # password (for the private signing key)
+                algorithm,        # algorithm ("AES" / "3xDES")
+                output_path,      # dest_file
+            )
+        except Exception as e:
+            messagebox.showerror("Send failed", str(e))
+            return
 
-        # TODO: replace this call with the real pipeline once crypto layer is ready
-        # from models.message_sender import build_and_send
-        # try:
-        #     build_and_send(params, self.private_key_ring, self.public_key_ring)
-        #     messagebox.showinfo("Success", f"Message saved to:\n{output_path}")
-        # except Exception as e:
-        #     messagebox.showerror("Error", str(e))
+        # posalji_poruku returns {"ERROR": bool, "info": str}
+        if result is None:
+            messagebox.showerror("Send failed", "Nepoznata greska (nema povratne vrednosti).")
+            return
+        if result.get("ERROR"):
+            messagebox.showerror("Send failed", str(result.get("info")))
+            return
 
-        # Temporary confirmation so the UI is testable right now
-        summary = (
-            f"Message collected ✓\n\n"
-            f"  Sign:      {'Yes — key ' + str(sign_key_id) if sign else 'No'}\n"
-            f"  Encrypt:   {'Yes — ' + str(algorithm) + ' key ' + str(enc_key_id) if encrypt else 'No'}\n"
-            f"  Compress:  {'Yes' if compress else 'No'}\n"
-            f"  Radix-64:  {'Yes' if radix64 else 'No'}\n"
-            f"  Output:    {output_path}"
-        )
-        messagebox.showinfo("Ready to send", summary)
+        messagebox.showinfo("Success", str(result.get("info")))
 
     @staticmethod
     def _extract_key_id(dropdown_value: str) -> str:

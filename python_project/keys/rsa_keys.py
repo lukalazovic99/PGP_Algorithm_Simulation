@@ -50,10 +50,10 @@ def generisi_kljuceve(name:str,email:str,size:int,password:str):
     dodaj_privatni_kljuc(privatni_dic)
 
 
-generisi_kljuceve("Bogdan","boki@nba.vr", 1024, "ipMANcar1234")
-generisi_kljuceve("NAROD","pozlatiti@srb.vranje", 2048, "12345")
-generisi_kljuceve("Anja Mihailov","cancel@bali.vr", 1024, "nonce")
-generisi_kljuceve("Luka Skoko","meil@mail.mail", 2048, "wtf")
-generisi_kljuceve("Drobi","mbape@diktator.mail", 1024, "12345")
+#generisi_kljuceve("Bogdan","boki@nba.vr", 1024, "ipMANcar1234")
+#generisi_kljuceve("NAROD","pozlatiti@srb.vranje", 2048, "12345")
+#generisi_kljuceve("Anja Mihailov","cancel@bali.vr", 1024, "nonce")
+#generisi_kljuceve("Luka Skoko","meil@mail.mail", 2048, "wtf")
+#generisi_kljuceve("Drobi","mbape@diktator.mail", 1024, "12345")
 
 

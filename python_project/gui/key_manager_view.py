@@ -1,5 +1,14 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog, messagebox, simpledialog
+
+from keys.rsa_keys import generisi_kljuceve
+from keys.prstenovi_kljuceva import (
+    load_prsten_privatnih_kljuceva,
+    load_prsten_javnih_kljuceva,
+    ukloni_privatni_kljuc,
+    ukloni_javni_kljuc,
+    dohvati_objekat_privatni_kljuc,
+)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -321,6 +330,16 @@ class KeyManagerView(tk.Frame):
                 f"{entry.get('key_size', '')} bit",
             ))
 
+    def _reload_rings(self):
+        """Re-reads both rings from disk and repopulates the tables."""
+        try:
+            self.private_key_ring = load_prsten_privatnih_kljuceva()
+            self.public_key_ring = load_prsten_javnih_kljuceva()
+        except Exception:
+            self.private_key_ring = []
+            self.public_key_ring = []
+        self._refresh_tables()
+
     def _get_selected_key_id(self, tree) -> str | None:
         """Returns the key_id of the selected row, or None if nothing selected."""
         selected = tree.focus()
@@ -343,25 +362,22 @@ class KeyManagerView(tk.Frame):
 
         data = dialog.result
 
-        # TODO: replace with real crypto call once rsa_keys.py is implemented
-        # from crypto.rsa_keys import generate_key_pair
-        # new_entry = generate_key_pair(
-        #     name=data["name"],
-        #     email=data["email"],
-        #     key_size=data["key_size"],
-        #     password=data["password"]
-        # )
-        # self.private_key_ring.append(new_entry)
-        # self.public_key_ring.append({...public part only...})
-        # self._refresh_tables()
+        try:
+            generisi_kljuceve(
+                data["name"],
+                data["email"],
+                data["key_size"],
+                data["password"],
+            )
+        except Exception as e:
+            messagebox.showerror("Generation failed", str(e))
+            return
 
-        # Temporary placeholder so the UI flow is testable now
+        self._reload_rings()
         messagebox.showinfo(
-            "Key pair ready to generate",
-            f"Name:     {data['name']}\n"
-            f"Email:    {data['email']}\n"
-            f"Key size: {data['key_size']} bits\n\n"
-            f"(Crypto layer not yet connected.)"
+            "Key pair generated",
+            f"Generated {data['key_size']}-bit key for "
+            f"{data['name']} <{data['email']}>."
         )
 
     def _on_delete_private(self):
@@ -372,6 +388,22 @@ class KeyManagerView(tk.Frame):
                                    "Please select a key to delete.")
             return
 
+        # Deleting a private key requires proving ownership via the password.
+        password = simpledialog.askstring(
+            "Password required",
+            f"Enter the password for private key {key_id} to delete it:",
+            show="•", parent=self
+        )
+        if password is None:
+            return  # user cancelled
+
+        # Verify the password by attempting to unlock the key.
+        check = dohvati_objekat_privatni_kljuc(key_id, password)
+        if check["ERROR"] is True:
+            messagebox.showerror("Wrong password",
+                                 "Incorrect password. Key was not deleted.")
+            return
+
         confirm = messagebox.askyesno(
             "Confirm delete",
             f"Delete private key {key_id}?\n\nThis cannot be undone."
@@ -379,15 +411,13 @@ class KeyManagerView(tk.Frame):
         if not confirm:
             return
 
-        # TODO: replace with real call once key_ring.py is implemented
-        # from models.key_ring import delete_private_key
-        # delete_private_key(key_id)
-        # self.private_key_ring = [k for k in self.private_key_ring
-        #                          if k["key_id"] != key_id]
-        # self._refresh_tables()
-
-        messagebox.showinfo("Delete", f"Key {key_id} marked for deletion.\n"
-                                      f"(Crypto layer not yet connected.)")
+        try:
+            ukloni_privatni_kljuc(key_id)
+        except Exception as e:
+            messagebox.showerror("Delete failed", str(e))
+            return
+        self._reload_rings()
+        messagebox.showinfo("Deleted", f"Private key {key_id} deleted.")
 
     def _on_delete_public(self):
         """Deletes the selected key from the public key ring."""
@@ -404,15 +434,13 @@ class KeyManagerView(tk.Frame):
         if not confirm:
             return
 
-        # TODO: replace with real call once key_ring.py is implemented
-        # from models.key_ring import delete_public_key
-        # delete_public_key(key_id)
-        # self.public_key_ring = [k for k in self.public_key_ring
-        #                         if k["key_id"] != key_id]
-        # self._refresh_tables()
-
-        messagebox.showinfo("Delete", f"Key {key_id} marked for deletion.\n"
-                                      f"(Crypto layer not yet connected.)")
+        try:
+            ukloni_javni_kljuc(key_id)
+        except Exception as e:
+            messagebox.showerror("Delete failed", str(e))
+            return
+        self._reload_rings()
+        messagebox.showinfo("Deleted", f"Public key {key_id} deleted.")
 
     def _on_export_public(self):
         """Exports only the public part of the selected private ring key to .pem."""

@@ -72,12 +72,16 @@ def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,
 
         }
     else:
+        if ziped:
+            eks_field = base64.b64encode(inner_bytes).decode("utf-8")
+        else:
+            eks_field = inner
         middle = {
             "IDEC": "",
             "IDPub": "",
             "EPub(Ks)": "",
             "IV": "",
-            "EKs(ZIP(MSG))": base64.b64encode(inner_bytes).decode("utf-8")
+            "EKs(ZIP(MSG))": eks_field
         }
 
     middle_str = json.dumps(middle)
