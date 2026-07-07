@@ -5,6 +5,7 @@ import base64
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 
+from receiver.receiver_entry import receive_message_from_file
 from sender.potpis import potpisi_poruku
 from sender.enkripcija import enkriptuj
 from receiver.main import receive_message
@@ -45,7 +46,7 @@ signed_layer = {
     "signature_timestamp": timestamp,
     "dva_okteta": base64.b64encode(dva_okteta).decode("ascii"),
     "IDPua": "TEST_SENDER_ID",
-    "EPra(HASH(timestamp+MSG))": base64.b64encode(bad_signature).decode("ascii"),
+    "EPra(HASH(timestamp+MSG))": base64.b64encode(signature).decode("ascii"),
     "MSG": msg
 }
 
@@ -74,10 +75,20 @@ outer_message = {
 
 outer_message_json = json.dumps(outer_message)
 
-result = receive_message(
-    outer_message_json,
+input_path = "test_mailbox/test_message.pgp"
+with open(input_path, "w", encoding="utf-8") as f:
+    f.write(outer_message_json)
+
+result = receive_message_from_file(
+    input_path,
     receiver_private_key_pem,
     sender_public_key_pem
 )
+
+# result = receive_message(
+#     outer_message_json,
+#     receiver_private_key_pem,
+#     sender_public_key_pem
+# )
 
 print(json.dumps(result, indent=2))
