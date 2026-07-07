@@ -20,7 +20,10 @@ def potpisi_poruku(poruka:str,key): #poruka u stringu koja se nalepi na timestam
     dva_okteta = h[:2]
     potpis = key.sign(
         h,
-        padding.PKCS1v15(),
+        padding.PSS(
+            mgf=padding.MGF1(hashes.SHA1()),
+            salt_length=padding.PSS.MAX_LENGTH
+        ),
         utils.Prehashed(hashes.SHA1())
     )
     return potpis, dva_okteta, timestamp

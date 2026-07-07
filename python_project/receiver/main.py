@@ -4,17 +4,19 @@ import zlib
 
 from receiver.decryption import decrypt_session_key
 from receiver.decryption import decrypt_payload
+from receiver.verification import verify_signature
 
 
 def unzip(message):
     return zlib.decompress(message)
 
 
-def decode_base64(message):
+def decode_base64(message: str) -> bytes:
     return base64.b64decode(message)
 
 
-def receive_message(outer_message, private_key_pem, sender_public_key_pem, private_key_password=None):
+def receive_message(outer_message: str, private_key_pem: str, sender_public_key_pem: str,
+                    private_key_password: str | None = None) -> dict:
     print("MSG: ", outer_message)
 
     outer = json.loads(outer_message)
@@ -51,3 +53,15 @@ def receive_message(outer_message, private_key_pem, sender_public_key_pem, priva
             signed_layer = json.loads(signed_layer_bytes.decode("utf-8"))
         else:
             signed_layer = payload_field
+    sig_rs = None
+    if signed:
+        print("Signed layer: ", signed_layer)
+        sig_rs = verify_signature(signed_layer["MSG"], signed_layer["signature_timestamp"],
+                                  decode_base64(signed_layer["dva_okteta"]),
+                                  decode_base64(signed_layer["EPra(HASH(timestamp+MSG))"]),
+                                  sender_public_key_pem)
+        print("Signature verification result: ", sig_rs)
+    else:
+        sig_rs = {"valid": None, "reason": "not_signed"}
+
+    return {"message": signed_layer["MSG"], "signature_verification_result": sig_rs}
