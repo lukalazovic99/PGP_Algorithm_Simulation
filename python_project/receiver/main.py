@@ -32,7 +32,7 @@ def receive_message(outer_message: str, private_key_pem: str, sender_public_key_
         layer1_bytes = decode_base64(layer1)
         encryption_layer = json.loads(layer1_bytes.decode("utf-8"))
     else:
-        encryption_layer = layer1
+        encryption_layer = json.loads(layer1)
 
     if encrypted:
         session_key = decrypt_session_key(encryption_layer["EPub(Ks)"], private_key_pem)
