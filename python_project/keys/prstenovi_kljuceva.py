@@ -4,22 +4,22 @@ from cryptography.hazmat.primitives import serialization
 
 
 def load_prsten_javnih_kljuceva ():
-    with open("python_project/keys/PUkeys.json", "r") as file:
+    with open("PUkeys.json", "r") as file:
         lista_kljuceva = json.load(file)
     return lista_kljuceva
 
 def load_prsten_privatnih_kljuceva ():
-    with open("python_project/keys/PRkeys.json", "r") as file:
+    with open("PRkeys.json", "r") as file:
         lista_kljuceva = json.load(file)
     return lista_kljuceva
 
 def store_prsten_javnih_kljuceva (prsten:list):
-    with open("python_project/keys/PUkeys.json", "w") as file:
-        json.dump(prsten,file)
+    with open("PUkeys.json", "w") as file:
+        json.dump(prsten,file,indent=2)
 
 def store_prsten_privatnih_kljuceva (prsten:list):
-    with open("python_project/keys/PRkeys.json", "w") as file:
-        json.dump(prsten,file)
+    with open("PRkeys.json", "w") as file:
+        json.dump(prsten,file,indent=2)
 
 def dodaj_javni_kljuc (kljuc:dict):
     lista_kljuceva = load_prsten_javnih_kljuceva()
