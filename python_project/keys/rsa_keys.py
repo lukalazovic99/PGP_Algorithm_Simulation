@@ -2,8 +2,7 @@ from datetime import datetime
 
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
-from prstenovi_kljuceva import *
-
+from python_project.keys.prstenovi_kljuceva import *
 
 def generisi_kljuceve(name:str,email:str,size:int,password:str):
     pr = rsa.generate_private_key(65537,size)
@@ -19,7 +18,7 @@ def generisi_kljuceve(name:str,email:str,size:int,password:str):
     privatni = pr.private_bytes(
         serialization.Encoding.PEM,
         serialization.PrivateFormat.PKCS8,
-        serialization.NoEncryption()
+        serialization.BestAvailableEncryption(password.encode("utf-8"))
     ).decode("utf-8")
 
     n = pu.public_numbers().n
@@ -34,7 +33,6 @@ def generisi_kljuceve(name:str,email:str,size:int,password:str):
         "user_email": email,
         "key_size": size,
         "public_key": javni,
-        "password": password,
         "encrypted_private_key": privatni
     }
 

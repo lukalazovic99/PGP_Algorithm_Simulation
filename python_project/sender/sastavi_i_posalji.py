@@ -11,24 +11,16 @@ from python_project.sender.zip import zipuj
 def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,
                     private_senderkey_id:str,public_recieverkey_id:str,password:str,algorithm:str,
                     dest_file:str):
-
     pr_key = None
     pu_key = None
     if sign:
-        ks = dohvati_privatni_kljuc(private_senderkey_id)
-        if ks is None:
-            print("Greska prilikom dohvatanja privatnog kljuca" + private_senderkey_id)
+        pr_key = dohvati_objekat_privatni_kljuc(private_senderkey_id, password)
+        if pr_key is None:
             return
-        encrypted_pr_key = ks["encrypted_private_key"].encode("utf-8")
-        pr_key = serialization.load_pem_private_key(encrypted_pr_key,password=None)
-
     if encrypt:
-        ke = dohvati_javni_kljuc(public_recieverkey_id)
-        if ke is None:
-            print("Greska prilikom dohvatanja javnog kljuca" + public_recieverkey_id)
+        pu_key = dohvati_objekat_javni_kljuc(public_recieverkey_id)
+        if pu_key is None:
             return
-        f_pu_key = ke["public_key"].encode("utf-8")
-        pu_key = serialization.load_pem_public_key(f_pu_key)
 
 
     #----------------------------------Dohvatili kljuceve-----------------------------------------
@@ -109,3 +101,5 @@ def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,
         json.dump(outer, f, indent=2) #indent da ne bude sve u 1 redu samo
 
     return
+
+

@@ -1,23 +1,24 @@
 import json
 
+from cryptography.hazmat.primitives import serialization
 
 
 def load_prsten_javnih_kljuceva ():
-    with open("PUkeys.json", "r") as file:
+    with open("python_project/keys/PUkeys.json", "r") as file:
         lista_kljuceva = json.load(file)
     return lista_kljuceva
 
 def load_prsten_privatnih_kljuceva ():
-    with open("PRkeys.json", "r") as file:
+    with open("python_project/keys/PRkeys.json", "r") as file:
         lista_kljuceva = json.load(file)
     return lista_kljuceva
 
 def store_prsten_javnih_kljuceva (prsten:list):
-    with open("PUkeys.json", "w") as file:
+    with open("python_project/keys/PUkeys.json", "w") as file:
         json.dump(prsten,file)
 
 def store_prsten_privatnih_kljuceva (prsten:list):
-    with open("PRkeys.json", "w") as file:
+    with open("python_project/keys/PRkeys.json", "w") as file:
         json.dump(prsten,file)
 
 def dodaj_javni_kljuc (kljuc:dict):
@@ -66,5 +67,25 @@ def dohvati_privatni_kljuc(id:str):
 
     return None
 
+def dohvati_objekat_javni_kljuc(id:str):
+    ke = dohvati_javni_kljuc(id)
+    if ke is None:
+        print("GRESKA dohvatanje javnog kljuca")
+        return None
+    ulaz_javnog_kljuca = ke["public_key"].encode("utf-8")
+    pu_key = serialization.load_pem_public_key(ulaz_javnog_kljuca)
+    return pu_key
 
+def dohvati_objekat_privatni_kljuc(id:str,password:str):
+    ke = dohvati_privatni_kljuc(id)
+    if ke is None:
+        print("GRESKA dohvatanje privatnog kljuca")
+        return None
+    ulaz_privatnog_kljuca = ke["encrypted_private_key"].encode("utf-8")
+    try:
+        pr_key = serialization.load_pem_private_key(ulaz_privatnog_kljuca, password.encode("utf-8"))
+    except (ValueError, TypeError):
+        print("GRESKA pogrešna lozinka")
+        return None
+    return pr_key
 

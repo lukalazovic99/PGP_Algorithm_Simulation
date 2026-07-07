@@ -2,6 +2,7 @@ import json
 import base64
 import zlib
 
+from keys.prstenovi_kljuceva import dohvati_javni_kljuc
 from receiver.decryption import decrypt_session_key
 from receiver.decryption import decrypt_payload
 from receiver.verification import verify_signature
@@ -55,6 +56,8 @@ def receive_message(outer_message: str, private_key_pem: str, sender_public_key_
     sig_rs = None
     if signed:
         print("Signed layer: ", signed_layer)
+        public_key_id = decode_base64(signed_layer["IDPua"])
+        #sender_public_key_pem = dohvati_javni_kljuc(public_key_id)
         sig_rs = verify_signature(signed_layer["MSG"], signed_layer["signature_timestamp"],
                                   decode_base64(signed_layer["dva_okteta"]),
                                   decode_base64(signed_layer["EPra(HASH(timestamp+MSG))"]),
