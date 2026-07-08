@@ -1,7 +1,13 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, simpledialog
 
-from keys.rsa_keys import generisi_kljuceve, exportuj_par_kljuceva, exportuj_javni_kljuc
+from keys.rsa_keys import (
+    generisi_kljuceve,
+    exportuj_javni_kljuc,
+    exportuj_par_kljuceva,
+    importuj_javni_kljuc,
+    importuj_par_kljuceva,
+)
 from keys.prstenovi_kljuceva import (
     load_prsten_privatnih_kljuceva,
     load_prsten_javnih_kljuceva,
@@ -224,10 +230,10 @@ class KeyManagerView(tk.Frame):
                   self._on_generate,  "#2c7be5", "white")
         self._btn(priv_btns, "✕  Delete Selected",
                   self._on_delete_private, "#e74c3c", "white")
-        self._btn(priv_btns, "↑  Export Public Key (.pem)",
-                  self._on_export_public, "#555555", "white")
         self._btn(priv_btns, "↑  Export Full Pair (.pem)",
                   self._on_export_private, "#555555", "white")
+        self._btn(priv_btns, "↓  Import Full Pair (.pem)",
+                  self._on_import_pair, "#27ae60", "white")
 
         # Divider
         tk.Frame(self, bg="#cccccc", height=1).pack(
@@ -267,6 +273,8 @@ class KeyManagerView(tk.Frame):
 
         self._btn(pub_btns, "↓  Import Public Key (.pem)",
                   self._on_import_public, "#27ae60", "white")
+        self._btn(pub_btns, "↑  Export Public Key (.pem)",
+                  self._on_export_public, "#555555", "white")
         self._btn(pub_btns, "✕  Delete Selected",
                   self._on_delete_public, "#e74c3c", "white")
 
@@ -443,8 +451,8 @@ class KeyManagerView(tk.Frame):
         messagebox.showinfo("Deleted", f"Public key {key_id} deleted.")
 
     def _on_export_public(self):
-        """Exports only the public part of the selected private ring key to .pem."""
-        key_id = self._get_selected_key_id(self.priv_tree)
+        """Exports the selected public key to a .pem file."""
+        key_id = self._get_selected_key_id(self.pub_tree)
         if not key_id:
             messagebox.showwarning("No selection",
                                    "Please select a key to export.")
@@ -458,17 +466,11 @@ class KeyManagerView(tk.Frame):
         if not path:
             return
 
-        try:
-            result = exportuj_javni_kljuc(key_id, path)
-        except Exception as e:
-            messagebox.showerror("Export failed", str(e))
-            return
-
-        if result["ERROR"] is True:
-            messagebox.showerror("Export failed", result["info"])
-            return
-
-        messagebox.showinfo("Export", f"Public key {key_id} -> {path}")
+        result = exportuj_javni_kljuc(key_id, path)
+        if result["ERROR"]:
+            messagebox.showerror("Export failed", str(result["info"]))
+        else:
+            messagebox.showinfo("Export", str(result["info"]))
 
     def _on_export_private(self):
         """Exports the full key pair (public + encrypted private) to .pem."""
@@ -486,17 +488,34 @@ class KeyManagerView(tk.Frame):
         if not path:
             return
 
-        try:
-            result = exportuj_par_kljuceva(key_id, path)
-        except Exception as e:
-            messagebox.showerror("Export failed", str(e))
+        result = exportuj_par_kljuceva(key_id, path)
+        if result["ERROR"]:
+            messagebox.showerror("Export failed", str(result["info"]))
+        else:
+            messagebox.showinfo("Export", str(result["info"]))
+
+    def _on_import_pair(self):
+        """Imports a full key pair from a .pem file into the private ring."""
+        path = filedialog.askopenfilename(
+            title="Import full key pair from .pem",
+            filetypes=[("PEM files", "*.pem"), ("All files", "*.*")]
+        )
+        if not path:
             return
 
-        if result["ERROR"] is True:
-            messagebox.showerror("Export failed", result["info"])
+        name = simpledialog.askstring("Name", "Enter a name for this key:", parent=self)
+        if name is None:
+            return
+        email = simpledialog.askstring("Email", "Enter the email for this key:", parent=self)
+        if email is None:
             return
 
-        messagebox.showinfo("Export", f"Key pair {key_id} -> {path}")
+        result = importuj_par_kljuceva(name, email, path)
+        if result["ERROR"]:
+            messagebox.showerror("Import failed", str(result["info"]))
+            return
+        self._reload_rings()
+        messagebox.showinfo("Import", str(result["info"]))
 
     def _on_import_public(self):
         """Imports a public key from a .pem file into the public key ring."""
@@ -507,14 +526,19 @@ class KeyManagerView(tk.Frame):
         if not path:
             return
 
-        # TODO: replace with real call once rsa_keys.py is implemented
-        # from crypto.rsa_keys import import_public_key
-        # new_entry = import_public_key(path)
-        # self.public_key_ring.append(new_entry)
-        # self._refresh_tables()
+        name = simpledialog.askstring("Name", "Enter a name for this key:", parent=self)
+        if name is None:
+            return
+        email = simpledialog.askstring("Email", "Enter the email for this key:", parent=self)
+        if email is None:
+            return
 
-        messagebox.showinfo("Import", f"Key imported from:\n{path}\n"
-                                      f"(Crypto layer not yet connected.)")
+        result = importuj_javni_kljuc(name, email, path)
+        if result["ERROR"]:
+            messagebox.showerror("Import failed", str(result["info"]))
+            return
+        self._reload_rings()
+        messagebox.showinfo("Import", str(result["info"]))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
