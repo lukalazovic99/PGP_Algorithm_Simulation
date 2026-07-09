@@ -5,10 +5,10 @@ from sender.sastavi_i_posalji import posalji_poruku
 
 
 # Existing real keys from the current key rings
-SENDER_ID = "0C014ED79C9B49ED"      # Bogdan
-SENDER_PASSWORD = "ipMANcar1234"
+SENDER_ID = "31E6D69B86519421"      # anja
+SENDER_PASSWORD = "nonce"
 
-RECEIVER_ID = "CC4A980E8616BB8D"    # Luka Skoko
+RECEIVER_ID = "9B9E78580DF9782D"    # luka
 RECEIVER_PASSWORD = "wtf"
 
 TEST_MSG = "Ovo je tajna poruka za test."

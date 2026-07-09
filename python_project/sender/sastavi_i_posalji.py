@@ -1,11 +1,10 @@
 import base64
+import zlib
 import json
 from cryptography.hazmat.primitives import serialization
 from keys.prstenovi_kljuceva import *
 from sender.enkripcija import enkriptuj
 from sender.potpis import potpisi_poruku
-from sender.r64 import radixuj
-from sender.zip import zipuj
 
 
 def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,
@@ -56,7 +55,7 @@ def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,
     #----------------------------POTPISIVANJE ZAVRSENO----------------------------
 
     if ziped:
-        inner_bytes=zipuj(inner_bytes)
+        inner_bytes=zlib.compress(inner_bytes)
 
     #----------------------------ZIPOVANJE ZAVRSENO----------------------------------
 
@@ -91,7 +90,7 @@ def posalji_poruku(msg:str,sign:bool,ziped:bool,encrypt:bool,radix64:bool,
 
 
     if radix64:
-        poruka = radixuj(middle_bytes).decode("utf-8")
+        poruka = base64.b64encode(middle_bytes).decode("utf-8")
     else:
         poruka = middle_str
 
